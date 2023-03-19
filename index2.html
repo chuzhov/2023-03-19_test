@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Calculating matches</title>
+    <meta charset="UTF-8">
+    <script>
+        function run() {
+
+            const SIDES = 4;
+            const PER_ONE_SIDE = 4;
+            const DIMENSIONS = 3;
+
+            function matchesAmount( n ) {
+                return n * DIMENSIONS * PER_ONE_SIDE;
+            }
+
+            function saver( iteration, base ) {
+               if (iteration === 1 || iteration === base + 1 ) return PER_ONE_SIDE
+               
+            }
+
+            function isInteger( n ) {
+                if ( typeof n === 'number' && Number.isInteger( n ) && n > 0 ) return true
+                else return false;
+            }
+
+            const inputElement = document.getElementById( "input-number" );
+            const inputNumber = Number( inputElement.value );
+
+            if ( isInteger( inputNumber ) ) {
+
+                const side = Math.pow( inputNumber, 1 / 3 );
+                if ( isInteger( side ) ) {
+                    document.getElementById( "output" ).
+                        innerHTML = `Фигуры составляют полный куб. <br>Необходимо спичек для строительства: ${matchesCountForSquare( side )}`;
+
+                } else {
+                    const base = Math.floor( side );
+                    const numToAdd = inputNumber - base ** 2;
+                    document.getElementById( "output" ).
+                        innerHTML = `Базовая фигура со стороной  ${base}
+                            <br>Осталось разместить фигур: ${numToAdd}`;
+
+                    let sum = matchesCountForSquare( base );
+                    for ( i = 1; i < numToAdd + 1; i++ ) {
+                        sum += SIDES - saver( i, base );
+                    }
+                    document.getElementById( "output" ).
+                        innerHTML += `<br>Всего для ${inputNumber} фигур потребуется спичек: ${sum}`;
+
+                }
+            } else {
+                alert( "Пожалуйста, введите корректный номер" );
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <label for="input-number">Введите количество фигур:</label>
+    <input type="text" id="input-number" name="input-number" onchange="run()">
+    <div id="output"></div>
+</body>
+
+</html>

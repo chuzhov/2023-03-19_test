@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Calculating matches</title>
+    <meta charset="UTF-8">
+    <script>
+        function run() {
+
+            const SIDES = 4;
+            const PER_SIDE = 4;
+            const DIMENTIONS = 3;
+
+            function matchesCountForSquare( n ) {
+                return n ** 2 * 4 * 1 - ( n - 1 ) * n * 2
+            }
+            function matchesCountForCube( n ) {
+                console.log( "экономия ", matchesCountForSquare( n ) );
+                return n ** DIMENTIONS * ( DIMENTIONS * PER_SIDE ) - ( n - 1 ) * matchesCountForSquare( n ) * DIMENTIONS;
+            }
+            function saver( iteration, base ) {
+                if ( iteration === 1 || iteration === base + 1 ) return 1;
+                return 2;
+            }
+            function isInteger( n ) {
+                if ( typeof n === 'number' && Number.isInteger( n ) && n > 0 ) return true
+                else return false;
+            }
+
+            const inputElement = document.getElementById( "input-number" );
+            const inputNumber = Number( inputElement.value );
+
+            if ( isInteger( inputNumber ) ) {
+
+                const raw = Math.pow( inputNumber, 1 / 3 );
+                if ( isInteger( raw ) ) {
+                    console.log( `Идеальный куб с ребром ${raw}` );
+                    console.log( `Необходимо спичек: ${matchesCountForCube( raw )}` );
+
+                } else {
+                    const edge = Math.ceil( raw );
+                    console.log( "Корень из трех - длина ребра куба: ", edge );
+                    const baseCube = Math.floor( raw );
+                    console.log( "Добавляем кубики вокруг куба с гранью: ", baseCube );
+                    const units = inputNumber - ( baseCube ** 3 );
+                    console.log( "Необходимо спозиционировать кубиков: ", units );
+
+                }
+
+
+
+
+                //     if ( isInteger( side ) ) {
+                //         document.getElementById( "output" ).
+                //             innerHTML = `Фигуры составляют полный куб. <br>Необходимо спичек для строительства: ${matchesCountForSquare( side )}`;
+
+                //     } else {
+                //         const base = Math.floor( side );
+                //         const numToAdd = inputNumber - base ** 2;
+                //         document.getElementById( "output" ).
+                //             innerHTML = `Базовая фигура со стороной  ${base}
+                //                 <br>Осталось разместить фигур: ${numToAdd}`;
+
+                //         let sum = matchesCountForSquare( base );
+                //         for ( i = 1; i < numToAdd + 1; i++ ) {
+                //             sum += SIDES - saver( i, base );
+                //         }
+                //         document.getElementById( "output" ).
+                //             innerHTML += `<br>Всего для ${inputNumber} фигур потребуется спичек: ${sum}`;
+
+                //     }
+                // } else {
+                //     alert( "Пожалуйста, введите корректный номер" );
+                // }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <label for="input-number">Введите количество фигур:</label>
+    <input type="text" id="input-number" name="input-number" onchange="run()">
+    <div id="output"></div>
+</body>
+
+</html>
