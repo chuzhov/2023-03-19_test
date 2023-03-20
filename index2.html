@@ -7,59 +7,77 @@
     <script>
         function run() {
 
-            const SIDES = 4;
-            const PER_ONE_SIDE = 4;
-            const DIMENSIONS = 3;
-
-            function matchesAmount( n ) {
-                return n * DIMENSIONS * PER_ONE_SIDE;
+            function getRandomInteger() {  //from 10 to 100
+                return Math.floor( Math.random() * 91 ) + 10;
             }
+            function getUniqueArrays( arr ) {
+                const uniqueArrays = [];
 
-            function saver( iteration, base ) {
-               if (iteration === 1 || iteration === base + 1 ) return PER_ONE_SIDE
-               
-            }
-
-            function isInteger( n ) {
-                if ( typeof n === 'number' && Number.isInteger( n ) && n > 0 ) return true
-                else return false;
-            }
-
-            const inputElement = document.getElementById( "input-number" );
-            const inputNumber = Number( inputElement.value );
-
-            if ( isInteger( inputNumber ) ) {
-
-                const side = Math.pow( inputNumber, 1 / 3 );
-                if ( isInteger( side ) ) {
-                    document.getElementById( "output" ).
-                        innerHTML = `Фигуры составляют полный куб. <br>Необходимо спичек для строительства: ${matchesCountForSquare( side )}`;
-
-                } else {
-                    const base = Math.floor( side );
-                    const numToAdd = inputNumber - base ** 2;
-                    document.getElementById( "output" ).
-                        innerHTML = `Базовая фигура со стороной  ${base}
-                            <br>Осталось разместить фигур: ${numToAdd}`;
-
-                    let sum = matchesCountForSquare( base );
-                    for ( i = 1; i < numToAdd + 1; i++ ) {
-                        sum += SIDES - saver( i, base );
+                for ( let i = 0; i < arr.length; i++ ) {
+                    for ( let j = 0; j < arr.length; j++ ) {
+                        for ( let k = 0; k < arr.length; k++ ) {
+                            for ( let l = 0; l < arr.length; l++ ) {
+                                // Исключаем повторяющиеся числа в массивах
+                                if ( i !== j && i !== k && i !== l && j !== k && j !== l && k !== l ) {
+                                    const uniqueArray = [ arr[ i ], arr[ j ], arr[ k ], arr[ l ] ];
+                                    uniqueArrays.push( uniqueArray );
+                                }
+                            }
+                        }
                     }
-                    document.getElementById( "output" ).
-                        innerHTML += `<br>Всего для ${inputNumber} фигур потребуется спичек: ${sum}`;
+                }
+
+                return uniqueArrays;
+            }
+
+            const comission = 0.1;
+            let totalComission = 0;
+            const accounts = [];
+            let initSum = 0;
+
+            //генерируем остатки по счетам
+            for ( i = 0; i < 4; i++ ) {
+                accounts[ i ] = getRandomInteger( 100 );
+            }
+            console.log( accounts );
+
+            const uniqueArrays = getUniqueArrays( accounts );
+
+            initSum = accounts.reduce( ( prev, cur ) => { return prev + cur } );
+            console.log( initSum );
+
+            console.log( "***********" );
+
+            for ( j = 0; j < 24; j++ ) {
+                totalComission = 0;
+                for ( i = 0; i < 3; i++ ) {
+
+                    console.log( `step ${i}` );
+                    console.log( uniqueArrays[ j ] );
+
+                    uniqueArrays[ j ][ i + 1 ] = uniqueArrays[ j ][ i ] + uniqueArrays[ j ][ i + 1 ];
+                    totalComission += uniqueArrays[ j ][ i + 1 ] * comission;
+                    console.log( "comission: ", totalComission );
+                    uniqueArrays[ j ][ i + 1 ] -= uniqueArrays[ j ][ i + 1 ] * comission;
+                    uniqueArrays[ j ][ i ] = 0;
 
                 }
-            } else {
-                alert( "Пожалуйста, введите корректный номер" );
+                uniqueArrays[ j ][ i + 1 ] = totalComission;
+                console.log( uniqueArrays[ j ] );
             }
+            console.log( uniqueArrays );
+
         }
     </script>
 </head>
 
 <body>
-    <label for="input-number">Введите количество фигур:</label>
-    <input type="text" id="input-number" name="input-number" onchange="run()">
+    <h1>Генерация распределения</h1>
+    <h2>денежных средств на рассчетных счетах:</h2>
+    <p>Создается четыре счета со случайными суммами,</p>
+    <p>и подсчитываются возможные возможые варианты объединения</p>
+    <button type="button" onclick=run()>Рассчитать</button>
+
     <div id="output"></div>
 </body>
 

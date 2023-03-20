@@ -7,10 +7,11 @@
     <script>
         function run() {
 
+            const DIMENSIONS = 2;
             const SIDES = 4;
 
             function matchesCountForSquare( n ) {
-                return n ** 2 * SIDES - ( n - 1 ) * n * 2
+                return n ** DIMENSIONS * SIDES - ( n - 1 ) * n * 2
             }
             function saver( iteration, base ) {
                 if ( iteration === 1 || iteration === base + 1 ) return 1;
@@ -54,9 +55,12 @@
 </head>
 
 <body>
+    <h1>Подсчет минимального количества спичек</h1>
+    <h2>для построения n квадратов со стороной 1 спичка</h2>
     <label for="input-number">Введите количество фигур:</label>
     <input type="text" id="input-number" name="input-number" onchange="run()">
     <div id="output"></div>
+    <a href="index2.html">Задача с расчетными счетами</a>
 </body>
 
 </html>
